@@ -6,3 +6,4 @@
   Infrastructure as Code – Define entire infrastructure in code format (JSON), easy to manage.
   Dependency Handling – Automatically manages resource dependencies.
 
+2. Understand diff fields in default arm template.
