@@ -1,0 +1,8 @@
+1. Why use ARM?
+  Automation – Deploy resources automatically, no clicking around the portal.
+  Consistency – Same setup every time, reduces human error.
+  Repeatability – Reuse templates to deploy multiple environments (e.g., dev, test, prod).
+  Version Control – Store in Git for tracking changes and collaboration.
+  Infrastructure as Code – Define entire infrastructure in code format (JSON), easy to manage.
+  Dependency Handling – Automatically manages resource dependencies.
+
