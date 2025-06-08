@@ -1,0 +1,5 @@
+1. why should learn azure CLI when GUI console already there?
+  - quick actions
+  - automation for projects
+  - reducing errors (configuration error)
+2. practice with AZ CLI commands( use azure a-z command list)
