@@ -1,0 +1,9 @@
+1. adding new images to azure container, but gitops dosnt know that new image has been pushed. so adding a new stage after build-push-update.
+2. In this update stage, when ever new image is stored in acr, the image name will be changed at runtime in k8s-specifications files which has already been provided by docker team for this voting app project.
+3. gitops is watching the azure git repo, so when thers a change in k8s-specification, it will deploy the new image in kubernetes cluster.
+4. create azure kubernetes service
+5. modify agent pool to limit resource usage for learning
+6. login to k8s cluster
+7. configure argocd
+8. write update shell script
+9. use ImagePullSecrets so that kubernetes can pull image from azure container registry because acr is private.

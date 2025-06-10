@@ -1,0 +1,61 @@
+# Trigger the pipeline only when files under the 'result/' directory are changed
+trigger:
+  paths:
+    include:
+      - result/*
+
+# Define resources used in the pipeline
+resources:
+  - repo: self # Use the current repository as a resource
+
+# Define reusable variables
+variables:
+  # Azure service connection for Azure Container Registry (ACR) authentication
+  dockerRegistryServiceConnection: "ec1ff8a5-9f54-46a6-8319-6f67708acc94"
+
+  # Name of the Docker image (repository in ACR)
+  imageRepository: "resultapp"
+
+  # ACR login server URL
+  containerRegistry: "priyamazurecicd.azurecr.io"
+
+  # Path to the Dockerfile to be used for building the image
+  dockerfilePath: "$(Build.SourcesDirectory)/result/Dockerfile"
+
+  # Unique tag for the image, using the Azure DevOps Build ID
+  tag: "$(Build.BuildId)"
+
+# Specify the agent pool to run the pipeline
+pool:
+  name: "azure-agent" # Uses a self-hosted or defined Azure agent pool named "azure-agent"
+
+# Define stages of the pipeline
+stages:
+  - stage: Build # First stage: Build the Docker image
+    displayName: Build stage # Friendly name shown in Azure DevOps UI
+    jobs:
+      - job: Build # Job to perform the build
+        displayName: Build # Job name shown in UI
+        steps:
+          - task: Docker@2 # Use Docker task version 2
+            displayName: Build image # Step name in UI
+            inputs:
+              containerRegistry: "$(dockerRegistryServiceConnection)" # Reference the service connection
+              repository: "$(imageRepository)" # Docker repo/image name
+              command: "build" # Only build the image (do not push yet)
+              Dockerfile: "result/Dockerfile" # Path to Dockerfile relative to the repo root
+              tags: "$(tag)" # Tag the image with the current build ID
+
+  - stage: Push # Second stage: Push the built image to ACR
+    displayName: Push stage # Friendly name shown in UI
+    jobs:
+      - job: Push # Job to perform the push
+        displayName: Push # Job name shown in UI
+        steps:
+          - task: Docker@2 # Use Docker task version 2
+            displayName: Push the image # Step name in UI
+            inputs:
+              containerRegistry: "$(dockerRegistryServiceConnection)" # ACR service connection
+              repository: "$(imageRepository)" # Docker image name to push
+              command: "push" # Only push the image (assumes it's already built and tagged)
+              tags: "$(tag)" # Push the image with the same build ID tag
